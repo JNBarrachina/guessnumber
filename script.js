@@ -2,19 +2,53 @@
 const guessInput = document.getElementById('guessInput');
 const guessButton = document.getElementById('guessButton');
 const message = document.getElementById('message');
+const attemptsNumbers = document.getElementById('attemptsNumbers');
 const attemptsInfo = document.getElementById('attempts');
 const playAgainButton = document.getElementById('playAgainButton');
+const selectDifficulty = document.getElementById("selectDiff");
+selectDifficulty.addEventListener("change", () => getDifficulty());
+const difficultyText = document.getElementById("thinkNum");
 
 // --- Variables del Juego ---
 let secretNumber;
 let attempts;
-const MAX_NUMBER = 100;
+let attemptsNums = [];
+let MAX_NUMBER;
 const MIN_NUMBER = 1;
 
 // --- Funciones ---
 
+//Seleccionar dificultad
+function getDifficulty(){
+    switch (selectDifficulty.value) {
+        case "value1":
+            MAX_NUMBER = 50;
+            difficultyText.innerText = `He pensado en un número entre 1 y ${MAX_NUMBER}. ¿Puedes adivinar cuál es?`;
+            startGame();
+            break;
+        case "value2":
+            MAX_NUMBER = 100;
+            difficultyText.innerText = `He pensado en un número entre 1 y ${MAX_NUMBER}. ¿Puedes adivinar cuál es?`;
+            startGame();
+            break;
+        case "value3":
+            MAX_NUMBER = 200;
+            difficultyText.innerText = `He pensado en un número entre 1 y ${MAX_NUMBER}. ¿Puedes adivinar cuál es?`;
+            startGame();
+            break;
+        case "value4":
+            MAX_NUMBER = 500;
+            difficultyText.innerText = `He pensado en un número entre 1 y ${MAX_NUMBER}. ¿Puedes adivinar cuál es?`;
+            startGame();
+            break;
+    }
+}
+
 // Función para iniciar o reiniciar el juego
 function startGame() {
+    attemptsNumbers.innerText = "";
+    attemptsNums = [];
+
     // Genera un número secreto entre MIN_NUMBER y MAX_NUMBER
     secretNumber = Math.floor(Math.random() * MAX_NUMBER) + MIN_NUMBER;
     attempts = 0; // Reinicia los intentos
@@ -53,17 +87,41 @@ function handleGuess() {
     }
 
     // Incrementar el contador de intentos
+    attemptsNums.push(userGuess);
+    console.log(attemptsNums);
+
+    let stringNums = "";
+    attemptsNums.forEach(num => {
+        stringNums += num + " ";
+    });
+
+
+    attemptsNumbers.innerText = `Números probados: ${stringNums}`;
     attempts++;
-    attemptsInfo.textContent = `Intentos: ${attempts}`;
+    attemptsInfo.textContent = `Intentos: ${attempts}/10`;
 
     // Comparar el intento con el número secreto
     if (userGuess === secretNumber) {
         setMessage(`¡Correcto! 🎉 El número era ${secretNumber}. Lo adivinaste en ${attempts} intentos.`, 'correct');
         endGame();
     } else if (userGuess < secretNumber) {
-        setMessage('¡Demasiado bajo! Intenta un número más alto. 👇', 'wrong');
+        if (attemptsNums.length == 10){
+            setMessage(`HAS AGOTADO LOS INTENTOS. HAS PERDIDO. El número secreto era el ${secretNumber}`, 'wrong');
+            attemptsInfo.style.color = "red";
+            endGame();
+        }
+        else{
+            setMessage('¡Demasiado bajo! Intenta un número más alto. 👇', 'wrong');
+        }
     } else {
-        setMessage('¡Demasiado alto! Intenta un número más bajo. 👆', 'wrong');
+        if (attemptsNums.length == 10){
+            setMessage(`HAS AGOTADO LOS INTENTOS. HAS PERDIDO. El número secreto era el ${secretNumber}`, 'wrong');
+            attemptsInfo.style.color = "red";
+            endGame();
+        }
+        else{
+            setMessage('¡Demasiado alto! Intenta un número más bajo. 👇', 'wrong');
+        }
     }
 
     // Limpiar el input para el siguiente intento (si no ha ganado)
@@ -104,4 +162,4 @@ guessInput.addEventListener('keyup', function(event) {
 playAgainButton.addEventListener('click', startGame);
 
 // --- Iniciar el juego al cargar la página ---
-startGame();
+getDifficulty();

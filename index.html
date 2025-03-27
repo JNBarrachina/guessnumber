@@ -12,7 +12,14 @@
 
     <div class="container">
         <h1>¡Adivina el Número! 🤔<br>🎈🎈🎈🎈🎈</h1>
-        <p>He pensado en un número entre 1 y 100. ¿Puedes adivinar cuál es?</p>
+        <select name="select" id="selectDiff">
+            <option value="value1">Fácil (1-50)</option>
+            <option value="value2">Medio (1-100)</option>
+            <option value="value3">Dificil (1-200)</option>
+            <option value="value4">Hardcore (1-500)</option>
+        </select>
+
+        <p id="thinkNum"></p>
 
         <div class="input-area">
             <label for="guessInput">Tu intento:</label>
@@ -21,6 +28,7 @@
         </div>
 
         <p id="message" class="message"></p>
+        <p id="attemptsNumbers"></p>
         <p id="attempts" class="attempts-info"></p>
 
         <button id="playAgainButton" class="play-again" style="display: none;">Jugar de Nuevo</button>
