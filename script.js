@@ -8,6 +8,7 @@ const playAgainButton = document.getElementById('playAgainButton');
 const selectDifficulty = document.getElementById("selectDiff");
 selectDifficulty.addEventListener("change", () => getDifficulty());
 const difficultyText = document.getElementById("thinkNum");
+const scoreText = document.getElementById("score");
 
 // --- Variables del Juego ---
 let secretNumber;
@@ -15,11 +16,14 @@ let attempts;
 let attemptsNums = [];
 let MAX_NUMBER;
 const MIN_NUMBER = 1;
+let highScore;
 
 // --- Funciones ---
 
 //Seleccionar dificultad
 function getDifficulty(){
+    scoreText.innerText = `HighScore: ${localStorage.getItem("highscore")} intentos`;
+
     switch (selectDifficulty.value) {
         case "value1":
             MAX_NUMBER = 50;
@@ -62,8 +66,6 @@ function startGame() {
     guessButton.disabled = false; // Habilita el botón de adivinar
     playAgainButton.style.display = 'none'; // Oculta el botón de jugar de nuevo
     guessInput.focus(); // Pone el foco en el input
-
-    console.log(`Pssst... el número secreto es ${secretNumber}`); // Ayuda para depurar
 }
 
 // Función para manejar el intento del usuario
@@ -88,11 +90,10 @@ function handleGuess() {
 
     // Incrementar el contador de intentos
     attemptsNums.push(userGuess);
-    console.log(attemptsNums);
 
     let stringNums = "";
     attemptsNums.forEach(num => {
-        stringNums += num + " ";
+        stringNums += "(" + num + ")" + " ";
     });
 
 
@@ -102,7 +103,7 @@ function handleGuess() {
 
     // Comparar el intento con el número secreto
     if (userGuess === secretNumber) {
-        setMessage(`¡Correcto! 🎉 El número era ${secretNumber}. Lo adivinaste en ${attempts} intentos.`, 'correct');
+        checkHighScore();
         endGame();
     } else if (userGuess < secretNumber) {
         if (attemptsNums.length == 10){
@@ -142,6 +143,21 @@ function endGame() {
     guessInput.disabled = true; // Deshabilita el input
     guessButton.disabled = true; // Deshabilita el botón de adivinar
     playAgainButton.style.display = 'inline-block'; // Muestra el botón de jugar de nuevo
+}
+
+//Chequear la HighScore en el localStorage
+function checkHighScore(){
+    if (localStorage.getItem("highscore") > attempts){
+        localStorage.setItem("highscore", attempts);
+
+        setMessage(`¡Correcto! 🎉 El número era ${secretNumber}. Lo adivinaste en ${attempts} intentos. Nuevo HIGH SCORE!!!`, 'correct');
+
+        scoreText.innerText = `HighScore: ${localStorage.getItem("highscore")} intentos`;
+        scoreText.style.color = "green"
+    }
+    else{
+        setMessage(`¡Correcto! 🎉 El número era ${secretNumber}. Lo adivinaste en ${attempts} intentos.`, 'correct');
+    }
 }
 
 // --- Event Listeners ---
