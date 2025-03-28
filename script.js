@@ -22,27 +22,24 @@ let highScore;
 
 //Seleccionar dificultad
 function getDifficulty(){
+    
     scoreText.innerText = `HighScore: ${localStorage.getItem("highscore")} intentos`;
 
     switch (selectDifficulty.value) {
         case "value1":
             MAX_NUMBER = 50;
-            difficultyText.innerText = `He pensado en un número entre 1 y ${MAX_NUMBER}. ¿Puedes adivinar cuál es?`;
             startGame();
             break;
         case "value2":
-            MAX_NUMBER = 100;
-            difficultyText.innerText = `He pensado en un número entre 1 y ${MAX_NUMBER}. ¿Puedes adivinar cuál es?`;
+            MAX_NUMBER = 100
             startGame();
             break;
         case "value3":
             MAX_NUMBER = 200;
-            difficultyText.innerText = `He pensado en un número entre 1 y ${MAX_NUMBER}. ¿Puedes adivinar cuál es?`;
             startGame();
             break;
         case "value4":
             MAX_NUMBER = 500;
-            difficultyText.innerText = `He pensado en un número entre 1 y ${MAX_NUMBER}. ¿Puedes adivinar cuál es?`;
             startGame();
             break;
     }
@@ -52,6 +49,7 @@ function getDifficulty(){
 function startGame() {
     attemptsNumbers.innerText = "";
     attemptsNums = [];
+    difficultyText.innerText = `He pensado en un número entre 1 y ${MAX_NUMBER}. ¿Puedes adivinar cuál es?`;
 
     // Genera un número secreto entre MIN_NUMBER y MAX_NUMBER
     secretNumber = Math.floor(Math.random() * MAX_NUMBER) + MIN_NUMBER;
@@ -146,17 +144,24 @@ function endGame() {
 
 //Chequear la HighScore en el localStorage
 function checkHighScore(){
-    if (localStorage.getItem("highscore") > attempts){
-        localStorage.setItem("highscore", attempts);
-
-        setMessage(`¡Correcto! 🎉 El número era ${secretNumber}. Lo adivinaste en ${attempts} intentos. Nuevo HIGH SCORE!!!`, 'correct');
-
-        scoreText.innerText = `HighScore: ${localStorage.getItem("highscore")} intentos`;
-        scoreText.style.color = "green"
+    if (!localStorage.getItem("highscore")){
+        newScore();
+    }
+    else if (localStorage.getItem("highscore") > attempts){
+        newScore();
     }
     else{
         setMessage(`¡Correcto! 🎉 El número era ${secretNumber}. Lo adivinaste en ${attempts} intentos.`, 'correct');
     }
+}
+
+function newScore(){
+    localStorage.setItem("highscore", attempts);
+
+    setMessage(`¡Correcto! 🎉 El número era ${secretNumber}. Lo adivinaste en ${attempts} intentos. Nuevo HIGH SCORE!!!`, 'correct');
+
+    scoreText.innerText = `HighScore: ${localStorage.getItem("highscore")} intentos`;
+    scoreText.style.color = "green";
 }
 
 // --- Event Listeners ---

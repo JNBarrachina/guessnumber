@@ -29,6 +29,15 @@ p {
     margin-bottom: 15px;
 }
 
+.sctScore{
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: center;
+    align-items: center;
+
+    gap: 1rem;
+}
+
 .input-area {
     margin: 25px 0;
     display: flex;
