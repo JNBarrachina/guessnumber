@@ -96,7 +96,6 @@ function handleGuess() {
         stringNums += "(" + num + ")" + " ";
     });
 
-
     attemptsNumbers.innerText = `Números probados: ${stringNums}`;
     attempts++;
     attemptsInfo.textContent = `Intentos: ${attempts}/10`;
